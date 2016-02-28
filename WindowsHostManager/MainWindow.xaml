@@ -70,16 +70,16 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <ScrollViewer VerticalAlignment="Top" Grid.Column="0">
-                <ListBox x:Name="hostProjects">
+            <ScrollViewer VerticalAlignment="Stretch" Grid.Column="0">
+                <ListBox x:Name="hostProjects" ItemsSource="{Binding ProjectLists}">
                     <ListBox.GroupStyle>
                         <GroupStyle ContainerStyle="{StaticResource groupItemStyle}"/>
                     </ListBox.GroupStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox/>
-                                <TextBlock Text=""/>
+                                <CheckBox IsChecked="True" Margin="2,1,5,1"/>
+                                <TextBlock Text="{Binding ProjectName}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -92,7 +92,8 @@
             <DataGrid x:Name="hostItems"  Grid.Column="2" AutoGenerateColumns="False"
                        ItemsSource="{Binding HostLists}"
                       SelectionMode="Extended" SelectionUnit="FullRow"
-                      CanUserAddRows="False" AlternatingRowBackground="AntiqueWhite" AlternationCount="2">
+                      CanUserAddRows="False" AlternatingRowBackground="AntiqueWhite"
+                      AlternationCount="2" RowDetailsVisibilityMode="VisibleWhenSelected">
                 <DataGrid.GroupStyle>
 
                     <GroupStyle ContainerStyle="{StaticResource groupItemStyle}">
@@ -119,6 +120,12 @@
                     <DataGridTextColumn Binding="{Binding Host}" Header="Host" />
                     <DataGridTextColumn Binding="{Binding Comment}" Header="Comment" />
                 </DataGrid.Columns>
+
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Comment}"/>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
             </DataGrid>
         </Grid>
     </Grid>

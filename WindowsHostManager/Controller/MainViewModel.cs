@@ -12,6 +12,7 @@ namespace WindowsHostManager.Controller
     public class MainViewModel
     {
         public ICollectionView HostLists { get; private set; }
+        public ICollectionView ProjectLists { get; private set; }
 
         public MainViewModel()
         {
@@ -24,7 +25,24 @@ namespace WindowsHostManager.Controller
             };
             HostLists = new ListCollectionView(testData);
             HostLists.GroupDescriptions.Add(new PropertyGroupDescription("GroupName"));
-            //hostItems.ItemsSource = HostLists;
+
+            initListbox();
+        }
+
+        private void initListbox()
+        {
+            var testData = new ObservableCollection<Model.HostProject>
+            {
+                new Model.HostProject { ProjectName="General1", ProjectType=Model.EProjectType.General},
+                new Model.HostProject { ProjectName="General2", ProjectType=Model.EProjectType.General},
+                new Model.HostProject { ProjectName="Local1", ProjectType=Model.EProjectType.Local},
+                new Model.HostProject { ProjectName="Local2", ProjectType=Model.EProjectType.Local},
+                new Model.HostProject { ProjectName="Internet1", ProjectType=Model.EProjectType.Internet},
+                new Model.HostProject { ProjectName="Internet2", ProjectType=Model.EProjectType.Internet},
+
+            };
+            ProjectLists = new ListCollectionView(testData);
+            ProjectLists.GroupDescriptions.Add(new PropertyGroupDescription("ProjectType"));
         }
     }
 }
