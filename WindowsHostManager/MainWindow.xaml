@@ -1,0 +1,125 @@
+﻿<Window x:Class="WindowsHostManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WindowsHostManager"
+        xmlns:prop="clr-namespace:WindowsHostManager.Properties"
+        mc:Ignorable="d"
+        Title="{StaticResource main_title}" Height="600" Width="800">
+    <Window.Resources>
+        <Style x:Key="italicText"  TargetType="{x:Type TextBlock}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InactiveBorderColor}}"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Foreground" Value="Gray"/>
+        </Style>
+        
+        <Style x:Key="groupItemStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <Expander IsExpanded="True">
+                            <Expander.Style>
+                                <Style TargetType="{x:Type Expander}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="BorderBrush" Value="Crimson"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Expander.Style>
+                            
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}" Style="{StaticResource italicText}"/>
+                                    <TextBlock Text="{Binding Path=ItemCount}" Style="{StaticResource italicText}" Margin="8,0,4,0"/>
+                                    <TextBlock Text="{StaticResource item}" Style="{StaticResource italicText}"/>
+                                </StackPanel>
+                            </Expander.Header>
+                            <ItemsPresenter/>
+                        </Expander>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <CollectionViewSource x:Key="hostItemsView" Source="mm"/>
+        </Grid.Resources>
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open">
+                        <MenuItem.Icon>
+                            <Image Source="images/file_open.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <ScrollViewer VerticalAlignment="Top" Grid.Column="0">
+                <ListBox x:Name="hostProjects">
+                    <ListBox.GroupStyle>
+                        <GroupStyle ContainerStyle="{StaticResource groupItemStyle}"/>
+                    </ListBox.GroupStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox/>
+                                <TextBlock Text=""/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+            <GridSplitter HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                          Grid.Column="1" ResizeBehavior="PreviousAndNext"
+                          Width="5" Background="#FFBCBCBC"/>
+            
+            <DataGrid x:Name="hostItems"  Grid.Column="2" AutoGenerateColumns="False"
+                       ItemsSource="{Binding HostLists}"
+                      SelectionMode="Extended" SelectionUnit="FullRow"
+                      CanUserAddRows="False" AlternatingRowBackground="AntiqueWhite" AlternationCount="2">
+                <DataGrid.GroupStyle>
+
+                    <GroupStyle ContainerStyle="{StaticResource groupItemStyle}">
+                        <GroupStyle.Panel>
+                            <ItemsPanelTemplate>
+                                <DataGridRowsPresenter/>
+                            </ItemsPanelTemplate>
+                        </GroupStyle.Panel>
+
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                
+                                <DockPanel Background="LightBlue">
+                                    <TextBlock Text="{Binding GroupName}" FontWeight="Bold" Padding="3"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                    
+                </DataGrid.GroupStyle>
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{Binding Activated}" Header="Activated"/>
+                    <DataGridTextColumn Binding="{Binding IP}" Header="IP"/>
+                    <DataGridTextColumn Binding="{Binding Host}" Header="Host" />
+                    <DataGridTextColumn Binding="{Binding Comment}" Header="Comment" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>
