@@ -39,7 +39,9 @@ namespace WindowsHostManager
                 }
                 catch
                 {
-                    MessageBox.Show("请以管理员权限运行程序", "获取管理员权限失败",
+                    MessageBox.Show(
+                        WindowsHostManager.Properties.Resources.RunAsAdmin,
+                        WindowsHostManager.Properties.Resources.PrivilegeFailed,
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally

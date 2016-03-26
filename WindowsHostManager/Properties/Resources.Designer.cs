@@ -59,5 +59,41 @@ namespace WindowsHostManager.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local.
+        /// </summary>
+        public static string LocalGroupName {
+            get {
+                return ResourceManager.GetString("LocalGroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Online.
+        /// </summary>
+        public static string OnlineGroupName {
+            get {
+                return ResourceManager.GetString("OnlineGroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 获取管理员权限失败.
+        /// </summary>
+        public static string PrivilegeFailed {
+            get {
+                return ResourceManager.GetString("PrivilegeFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 请以管理员权限运行程序.
+        /// </summary>
+        public static string RunAsAdmin {
+            get {
+                return ResourceManager.GetString("RunAsAdmin", resourceCulture);
+            }
+        }
     }
 }

@@ -117,4 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="LocalGroupName" xml:space="preserve">
+    <value>Local</value>
+  </data>
+  <data name="OnlineGroupName" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="PrivilegeFailed" xml:space="preserve">
+    <value>获取管理员权限失败</value>
+  </data>
+  <data name="RunAsAdmin" xml:space="preserve">
+    <value>请以管理员权限运行程序</value>
+  </data>
 </root>

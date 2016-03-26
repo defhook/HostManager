@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using WindowsHostManager.Model;
 
 namespace WindowsHostManager.Controller
 {
@@ -11,22 +14,113 @@ namespace WindowsHostManager.Controller
     {
         private string getHostPath()
         {
-            string windir = Environment.SystemDirectory;
-            System.IO.Path.Combine(windir, "drivers/etc/hosts");
-            return "";
+            string host_dir = Environment.SystemDirectory;
+            host_dir = System.IO.Path.Combine(host_dir, @"drivers\etc\hosts");
+            if (System.IO.File.Exists(host_dir))
+            {
+                return host_dir;
+            }
+            throw new System.IO.FileNotFoundException(host_dir);
         }
 
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        static extern uint GetWindowsDirectory(StringBuilder buffer, uint usize);
-
-        private string getWindowsDirectory()
+        private string getHostPattern()
         {
-            uint usize = 0;
-            usize = GetWindowsDirectory(null, usize);
+            string ip = @"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b";
+            string host = @"\b\S+\b";
+            string comment = @".+";
 
-            StringBuilder sb = new StringBuilder((int)usize);
-            GetWindowsDirectory(sb, usize);
+            var sb = new StringBuilder();
+
+            sb.AppendFormat(@"({0})\s+({1})[\s#]*({2})?",
+                new string[] { ip, host, comment });
+
             return sb.ToString();
         }
+
+        private async Task<ObservableCollection<Model.HostItem>>
+            readHostFileAsync(string host_path)
+        {
+            string lines = null;
+
+            using (var freader = new System.IO.StreamReader(host_path))
+            {
+
+                if (freader.Peek() >= 0)
+                {
+                    lines = await freader.ReadToEndAsync();
+                }
+
+                if (lines == null
+                    || (lines.Length == 0))
+                {
+                    throw new System.IO.IOException();
+                }
+
+            }
+
+            using (var sreader = new System.IO.StringReader(lines))
+            {
+                var pattern = new Regex(getHostPattern(), RegexOptions.Compiled);
+                var collections = new ObservableCollection<Model.HostItem>();
+
+                while (sreader.Peek() >= 0)
+                {
+                    string line = sreader.ReadLine();
+                    line.Trim();
+
+                    var result = pattern.Match(line);
+                    if (result.Success)
+                    {
+                        var item = new Model.HostItem()
+                        {
+                            Activated = !line.StartsWith("#"),
+                            IP = result.Groups[1].Value,
+                            Host = result.Groups[2].Value,
+                            Comment = result.Groups[3].Value,
+                            GroupName = WindowsHostManager.Properties.Resources.LocalGroupName
+                        };
+                        collections.Add(item);
+                    }
+                }
+                return collections;
+            }
+        }
+
+        public ObservableCollection<Model.HostItem> ReadHostFile()
+        {
+            try
+            {
+                string host_path = getHostPath();
+                ObservableCollection<Model.HostItem> items = null;
+                Task.Run(async () => items = await readHostFileAsync(host_path)).Wait();
+                return items;
+                
+            }
+            catch (Exception exp)
+            when (
+                exp is System.IO.IOException
+                || exp is UnauthorizedAccessException)
+            {
+                throw new System.IO.IOException(exp.Message);
+            }
+        }
+
+        public async Task<ObservableCollection<Model.HostItem>>
+            ReadHostFileAsync()
+        {
+            try
+            {
+                string host_path = getHostPath();
+                return await readHostFileAsync(host_path);
+            }
+            catch (Exception exp)
+            when (
+                exp is System.IO.IOException
+                || exp is UnauthorizedAccessException)
+            {
+                throw new System.IO.IOException(exp.Message);
+            }
+        }
+
     }
 }
