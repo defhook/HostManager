@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Controller\HostReader.cs" />
     <Compile Include="Controller\MainViewModel.cs" />
+    <Compile Include="Controller\ProjectManager.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

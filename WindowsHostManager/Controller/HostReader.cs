@@ -12,7 +12,7 @@ namespace WindowsHostManager.Controller
 {
     public class HostReader
     {
-        private string getHostPath()
+        static private string getSystemHostPath()
         {
             string host_dir = Environment.SystemDirectory;
             host_dir = System.IO.Path.Combine(host_dir, @"drivers\etc\hosts");
@@ -23,7 +23,7 @@ namespace WindowsHostManager.Controller
             throw new System.IO.FileNotFoundException(host_dir);
         }
 
-        private string getHostPattern()
+        static private string getHostPattern()
         {
             string ip = @"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b";
             string host = @"\b\S+\b";
@@ -37,7 +37,7 @@ namespace WindowsHostManager.Controller
             return sb.ToString();
         }
 
-        private async Task<ObservableCollection<Model.HostItem>>
+        static private async Task<ObservableCollection<Model.HostItem>>
             readHostFileAsync(string host_path)
         {
             string lines = null;
@@ -86,11 +86,10 @@ namespace WindowsHostManager.Controller
             }
         }
 
-        public ObservableCollection<Model.HostItem> ReadHostFile()
+        static public ObservableCollection<Model.HostItem> ReadHostFile(string host_path)
         {
             try
             {
-                string host_path = getHostPath();
                 ObservableCollection<Model.HostItem> items = null;
                 Task.Run(async () => items = await readHostFileAsync(host_path)).Wait();
                 return items;
@@ -105,12 +104,11 @@ namespace WindowsHostManager.Controller
             }
         }
 
-        public async Task<ObservableCollection<Model.HostItem>>
-            ReadHostFileAsync()
+        static public async Task<ObservableCollection<Model.HostItem>>
+            ReadHostFileAsync(string host_path)
         {
             try
             {
-                string host_path = getHostPath();
                 return await readHostFileAsync(host_path);
             }
             catch (Exception exp)
@@ -120,6 +118,19 @@ namespace WindowsHostManager.Controller
             {
                 throw new System.IO.IOException(exp.Message);
             }
+        }
+
+        static public ObservableCollection<Model.HostItem> ReadSystemHostFile()
+        {
+            string host_path = getSystemHostPath();
+            return ReadHostFile(host_path);
+        }
+
+        static public async Task<ObservableCollection<Model.HostItem>>
+            ReadSystemHostFileAsync()
+        {
+            string host_path = getSystemHostPath();
+            return await ReadHostFileAsync(host_path);
         }
 
     }

@@ -16,8 +16,7 @@ namespace WindowsHostManager.Controller
 
         public MainViewModel()
         {
-            var reader = new HostReader();
-            var testData = reader.ReadHostFile();
+            var testData = HostReader.ReadSystemHostFile();
             HostLists = new ListCollectionView(testData);
             HostLists.GroupDescriptions.Add(new PropertyGroupDescription("GroupName"));
 
@@ -28,12 +27,12 @@ namespace WindowsHostManager.Controller
         {
             var testData = new ObservableCollection<Model.HostProject>
             {
-                new Model.HostProject { ProjectName="General1", ProjectType=Model.EProjectType.General},
-                new Model.HostProject { ProjectName="General2", ProjectType=Model.EProjectType.General},
+                new Model.HostProject { ProjectName="General1", ProjectType=Model.EProjectType.System},
+                new Model.HostProject { ProjectName="General2", ProjectType=Model.EProjectType.System},
                 new Model.HostProject { ProjectName="Local1", ProjectType=Model.EProjectType.Local},
                 new Model.HostProject { ProjectName="Local2", ProjectType=Model.EProjectType.Local},
-                new Model.HostProject { ProjectName="Internet1", ProjectType=Model.EProjectType.Internet},
-                new Model.HostProject { ProjectName="Internet2", ProjectType=Model.EProjectType.Internet},
+                new Model.HostProject { ProjectName="Internet1", ProjectType=Model.EProjectType.Online},
+                new Model.HostProject { ProjectName="Internet2", ProjectType=Model.EProjectType.Online},
 
             };
             ProjectLists = new ListCollectionView(testData);
