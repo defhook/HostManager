@@ -57,11 +57,22 @@ namespace WindowsHostManager.Model
             }
         }
 
+        public bool Activated
+        {
+            get { return activated; }
+            set
+            {
+                activated = value;
+                NotifyPropertyChanged("Activated");
+            }
+        }
+
 
         private Uri projectPath; // hosts file path
         private string projectName;
         private ObservableCollection<HostItem> hostItems;
         private EProjectType projectType;
+        private bool activated;
 
         public event PropertyChangedEventHandler PropertyChanged;
 

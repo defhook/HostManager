@@ -42,6 +42,19 @@
             </Setter>
         </Style>
 
+        <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Activated}" Value="True">
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+            </Style.Triggers>
+            <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+            <Style.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightGreen"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="LightBlue"/>
+            </Style.Resources>
+        </Style>
+
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -49,7 +62,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.Resources>
-            <CollectionViewSource x:Key="hostItemsView" Source="mm"/>
+            <CollectionViewSource x:Key="hostItemsView"/>
         </Grid.Resources>
         <DockPanel Grid.Row="0">
             <Menu DockPanel.Dock="Top">
@@ -70,14 +83,15 @@
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <ScrollViewer VerticalAlignment="Stretch" Grid.Column="0">
-                <ListBox x:Name="hostProjects" ItemsSource="{Binding ProjectLists}">
+                <ListBox x:Name="hostProjects" ItemsSource="{Binding ProjectLists}"
+                         ItemContainerStyle="{StaticResource ListBoxItemStyle}">
                     <ListBox.GroupStyle>
                         <GroupStyle ContainerStyle="{StaticResource groupItemStyle}"/>
                     </ListBox.GroupStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="True" Margin="2,1,5,1"/>
+                                <CheckBox IsChecked="{Binding Activated, Mode=TwoWay}" Margin="2,1,5,1"/>
                                 <TextBlock Text="{Binding ProjectName}"/>
                             </StackPanel>
                         </DataTemplate>

@@ -27,12 +27,11 @@ namespace WindowsHostManager.Controller
         {
             var testData = new ObservableCollection<Model.HostProject>
             {
-                new Model.HostProject { ProjectName="General1", ProjectType=Model.EProjectType.System},
-                new Model.HostProject { ProjectName="General2", ProjectType=Model.EProjectType.System},
-                new Model.HostProject { ProjectName="Local1", ProjectType=Model.EProjectType.Local},
-                new Model.HostProject { ProjectName="Local2", ProjectType=Model.EProjectType.Local},
-                new Model.HostProject { ProjectName="Internet1", ProjectType=Model.EProjectType.Online},
-                new Model.HostProject { ProjectName="Internet2", ProjectType=Model.EProjectType.Online},
+                new Model.HostProject { ProjectName="General", ProjectType=Model.EProjectType.System, Activated=true},
+                new Model.HostProject { ProjectName="Local1", ProjectType=Model.EProjectType.Local, Activated=true},
+                new Model.HostProject { ProjectName="Local2", ProjectType=Model.EProjectType.Local, Activated=false},
+                new Model.HostProject { ProjectName="Internet1", ProjectType=Model.EProjectType.Online, Activated=true},
+                new Model.HostProject { ProjectName="Internet2", ProjectType=Model.EProjectType.Online, Activated=false},
 
             };
             ProjectLists = new ListCollectionView(testData);

@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using WindowsHostManager.Model;
 
 namespace WindowsHostManager
 {
@@ -30,6 +31,17 @@ namespace WindowsHostManager
 
             DataContext = new Controller.MainViewModel();
 
+        }
+
+        protected void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as ListBoxItem;
+            if(item != null)
+            {
+                var project = item.DataContext as HostProject;
+                project.Activated = !project.Activated;
+            }
+            
         }
     }
 }
